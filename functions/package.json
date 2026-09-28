@@ -1,0 +1,20 @@
+{
+  "name": "safar-khana-functions",
+  "description": "YouTube Data API sync for Safar Khana archive",
+  "engines": {
+    "node": "20"
+  },
+  "main": "src/index.js",
+  "scripts": {
+    "serve": "firebase emulators:start --only functions",
+    "deploy": "firebase deploy --only functions",
+    "sync:local": "node src/runLocalSync.js",
+    "export:archive": "node src/exportArchive.js"
+  },
+  "dependencies": {
+    "firebase-admin": "^12.7.0",
+    "firebase-functions": "^6.3.0",
+    "googleapis": "^144.0.0"
+  },
+  "private": true
+}
