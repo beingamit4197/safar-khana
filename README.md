@@ -1,70 +1,114 @@
-# Getting Started with Create React App
+# Safar Khana
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+**Explore · Travel · Food · Stories**
 
-## Available Scripts
+Public media hub for the [Safar Khana](https://www.youtube.com/@safarkhana) YouTube channel — a structured archive of long videos, Shorts, and playlists, not just a links page.
 
-In the project directory, you can run:
+**Live:** [https://beingamit4197.github.io/safar-khana/](https://beingamit4197.github.io/safar-khana/)
 
-### `npm start`
+---
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Features
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- **Home** — brand hero, latest featured video, uploads, Shorts, playlists, most watched, channel stats
+- **Videos / Shorts / Playlists** — browseable archive with search & filters
+- **Watch** — embedded player, description, tags, related videos
+- **Interactive Shorts** — inline play with expand for a taller watch view
+- **About** — channel banner, avatar, stats, full description
+- **Dark / light theme** — Navbar toggle, preference saved in `localStorage`
+- **Real YouTube data** — shipped as a static archive dump (`src/data/youtubeArchive.json`); optional Firebase/Firestore sync later
 
-### `npm test`
+---
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Tech stack
 
-### `npm run build`
+| Layer | Choice |
+| --- | --- |
+| UI | React 19, CSS (design tokens + `data-theme`) |
+| Routing | React Router 6 |
+| Bundler | Create React App (`react-scripts`) |
+| Data | YouTube Data API → JSON archive (optional Firebase Functions + Firestore) |
+| Hosting | GitHub Pages |
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+---
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Routes
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+| Path | Page |
+| --- | --- |
+| `/` | Home |
+| `/videos` | Long-form videos |
+| `/shorts` | Shorts grid |
+| `/playlists` | Playlists |
+| `/playlist/:playlistId` | Playlist detail + tracklist |
+| `/watch/:videoId` | Watch page |
+| `/about` | About the channel |
+| `/search` | Search |
 
-### `npm run eject`
+---
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Quick start
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```bash
+npm install
+npm start
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+App runs at [http://127.0.0.1:3000](http://127.0.0.1:3000).
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+| Script | Purpose |
+| --- | --- |
+| `npm start` / `npm run dev` | Local development |
+| `npm run build` | Production build (`build/`, SPA `404.html` for Pages) |
+| `npm test` | CRA test runner |
+| `npm run export:youtube` | Refresh archive JSON via YouTube API (see below) |
 
-## Learn More
+---
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Data source
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+By default the site reads **`src/data/youtubeArchive.json`** (exported from the YouTube Data API for `@safarkhana`).
 
-### Code Splitting
+To refresh the dump (needs a YouTube Data API key — never commit it):
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+```bash
+cd functions
+npm install
+YOUTUBE_API_KEY=... YOUTUBE_CHANNEL_ID=@safarkhana npm run export:archive
+```
 
-### Analyzing the Bundle Size
+Optional Firebase path (Firestore + Cloud Functions sync) is scaffolded under `functions/` and `.env.example`. Keep `REACT_APP_USE_FIRESTORE=false` until credentials are configured.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+---
 
-### Making a Progressive Web App
+## Deploy (GitHub Pages)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+Push to `main` triggers [.github/workflows/deploy-pages.yml](.github/workflows/deploy-pages.yml).
 
-### Advanced Configuration
+Site URL: **https://beingamit4197.github.io/safar-khana/**
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+Local production build check:
 
-### Deployment
+```bash
+npm run build
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+---
 
-### `npm run build` fails to minify
+## Project layout
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+```
+src/
+  components/     Navbar, Footer, VideoCard, ShortCard
+  context/        ArchiveProvider, ThemeProvider
+  data/           youtubeArchive.json, helpers
+  pages/          Home, Videos, Shorts, Watch, …
+  lib/            contentApi, firebase stub, formatters
+functions/        YouTube export + optional sync
+```
+
+---
+
+## License
+
+Private project for the Safar Khana channel archive.
